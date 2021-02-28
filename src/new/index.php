@@ -19,7 +19,7 @@ if(!($strategy == "Smart" || $strategy == "Random")){
 
 else{
     $uniqueID = uniqid();
-    $message =  array("response" => $strategy, "pid" => $uniqueID);
+    $message =  array("response" => true, "pid" => $uniqueID);
     $board = new Board(BOARD_SIZE, $strategy, $uniqueID);
     saveGame($uniqueID, $board);
     echo json_encode($message);
