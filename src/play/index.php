@@ -110,8 +110,10 @@ class Index
             $this->game->playerMove($move_list);
             $comp_coors = $this->game->computerMove();
 
-            $this->x_comp = $comp_coors[0];
-            $this->y_comp = $comp_coors[1];
+            if(!empty($comp_coors)){
+                $this->x_comp = $comp_coors[0];
+                $this->y_comp = $comp_coors[1];
+            }
 
             $ack_move = $this->game->toOutput(1, array($this->x_player, $this->y_player));
             $move = $this->game->toOutput(2, array($this->x_comp, $this->y_comp));
@@ -123,5 +125,6 @@ class Index
 
     }
 }
+
 $indexStart = new Index();
 $indexStart->start();

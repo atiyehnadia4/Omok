@@ -53,6 +53,7 @@ class Game
             for($j = 0; $j < count($this->board->boardPositions[0]); $j++){
                 if($this->board->boardPositions[$i][$j] == $player){
                     # Check \
+                    array_push($this->winning_row, array($i => $j));
                     if($this->countConsecutive($i, $j, -1,1, $player) + $this->countConsecutive($i, $j, 1,-1, $player) >= 4){
                         return true;
                     }
@@ -62,6 +63,7 @@ class Game
                     }
                     #Check --
                     if($this->countConsecutive($i, $j, -1,0, $player) + $this->countConsecutive($i, $j, 1,0, $player) >= 4){
+                        echo $this->countConsecutive($i, $j, -1,0, $player) + $this->countConsecutive($i, $j, 1,0, $player);
                         return true;
                     }
                     #Check |
@@ -85,8 +87,8 @@ class Game
             $y += $dy;
 
             if(!empty($this->board->boardPositions[$y][$x]) && $this->board->boardPositions[$y][$x] == $player) {
+                array_push($this->winning_row, array($y => $x));
                 $count++;
-                array_push($this->winning_row, $y, $x);
             }
             else {
                 break;
@@ -94,151 +96,6 @@ class Game
 
         }
         return $count;
-    }
-
-
-    function horizontalWin($player, $x)
-    {
-        $temp = [15];
-        for ($i = 0; $i < 15; $i++) {
-            $temp[$i] = ($this->board->getStone($x, $i)); //populate temp with row
-        }
-        for ($i = 1; $i < 15; $i++) {
-            $count = 0;
-            if ($temp[$i] == $player) {
-                $count++;
-                for ($j = 1; $j < 6; $j++) {
-                    if ($count == 5) {
-                        array_push($this->winning_row, $x, $j-4, $x, $j-3, $x,  $j-2, $x,  $j-1, $x, $j);
-                        if ($player == 1) {
-                            $this->p_win = true;
-
-                        }
-                        else {
-                            $this->c_win = true;
-                        }
-                        return true;
-                    }
-                    if (!empty($temp[$i + $j]) == $player) {
-                        $count++;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    function verticalWin($player, $y)
-    {       //checks up and down in row to check if there is a 5 streak
-        $temp = [15];
-        for($i = 0; $i < 15; $i++){
-            $temp[$i] = $this->board->getStone($i, $y);
-        }
-        for($i = 1; $i < 15; $i++){
-            $count = 0;
-            if ($temp[$i] == $player) {
-                $count++;
-                for ($j = 1; $j < 6; $j++) {
-                    if ($count == 5) {
-                        if ($player == 1) {
-                            $this->p_win = true;
-                        } else {
-                            $this->c_win = true;
-                        }
-                        return true;
-                    }
-                    if (!empty($temp[$i + $j]) == $player) {
-                        $count++;
-                    }
-                }
-
-            }
-        }
-        return false;
-    }
-
-    function diagonalWin($player, $x, $y)
-    {
-        $temp = [5];
-        $count = 0;
-        for ($i = 0; $i < 5; $i++) {  //top right
-            $temp[$i] = $this->board->getStone($x + $i, $y + $i);  //populates array
-        }
-        if($temp[0] == $player) {
-            $count=1;
-            for ($i = 1; $i < 5; $i++) {
-                if ($count == 5) {
-                    if ($player == 1) {
-                        $this->p_win = true;
-                    } else {
-                        $this->c_win = true;
-                    }
-                    return true;
-                }
-                if ($temp[$i] == $player) {       //checks array
-                    $count++;
-                }
-            }
-        }
-        $temp1 = [5];
-        $count = 0;
-        for ($i = 0; $i < 5; $i++) {             //top left
-            $temp1[$i] = $this->board->getStone($x - $i, $y + $i);  //populates array
-        }
-        for ($i = 0; $i < 5; $i++) {
-            if ($count == 5) {
-                if ($player == 1) {
-                    $this->p_win = true;
-                } else {
-                    $this->c_win = true;
-                }
-                return true;
-            }
-            if ($temp1[$i] == $player) {       //checks array
-                $count++;
-            }
-        }
-
-        $temp2 = [5];
-        $count = 0;
-        for ($i = 0; $i < 5; $i++) {             //bottom left
-            $temp2[$i] = $this->board->getStone($x - $i, $y - $i);  //populates array
-        }
-        for ($i = 0; $i < 5; $i++) {
-            if ($count == 5) {
-                if ($player == 1) {
-                    $this->p_win = true;
-                } else {
-                    $this->c_win = true;
-                }
-                return true;
-            }
-            if ($temp2[$i] == $player) {       //checks array
-                $count++;
-            }
-        }
-
-        $temp3 = [5];
-        $count = 0;
-        for ($i = 0; $i < 5; $i++) {             //top right
-            $temp3[$i] = $this->board->getStone($x - $i, $y + $i);  //populates array
-        }
-
-        for ($i = 0; $i < 5; $i++) {
-            if ($count == 5) {
-                if ($player == 1) {
-                    $this->p_win = true;
-                } else {
-                    $this->c_win = true;
-                }
-                return true;
-            }
-            if ($temp3[$i] == $player) {       //checks array
-                $count++;
-            }
-        }
-        return false;
     }
 
     function checkDraw()
@@ -263,7 +120,7 @@ class Game
                 $result = array('x' => $x, 'y' => $y, 'isWin' => $this->p_win, 'isDraw' => $this->isDraw, 'row' => []);
                 return $result;
             } elseif ($this->p_win) {
-                $result = array('x' => $x, 'y' => $y, 'isWin' => $this->p_win, 'isDraw' => $this->isDraw, 'row' => $this->winning_row);
+                $result = array('x' => $x, 'y' => $y, 'isWin' => $this->p_win, 'isDraw' => $this->isDraw, 'row' => array_slice($this->winning_row, 0, 5));
                 return $result;
             } else {
                 $result = array('x' => $x, 'y' => $y, 'isWin' => $this->p_win, 'isDraw' => $this->isDraw, 'row' => []);
@@ -275,7 +132,7 @@ class Game
                 $result = array('x' => $x, 'y' => $y, 'isWin' => $this->c_win, 'isDraw' => $this->isDraw, 'row' => []);
                 return $result;
             } elseif ($this->c_win) {
-                $result = array('x' => $x, 'y' => $y, 'isWin' => $this->c_win, 'isDraw' => $this->isDraw, 'row' => $this->winning_row);
+                $result = array('x' => $x, 'y' => $y, 'isWin' => $this->c_win, 'isDraw' => $this->isDraw, 'row' => array_slice($this->winning_row, 0, 5));
                 return $result;
             } else {
                 $result = array('x' => $x, 'y' => $y, 'isWin' => $this->c_win, 'isDraw' => $this->isDraw, 'row' => []);

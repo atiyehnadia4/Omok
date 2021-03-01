@@ -61,4 +61,12 @@
 
             return self::fromJson($json);
         }
+
+        function getRow($x, $dx, $y, $dy){
+            $row = array();
+            for($i = 0; $i < 4; $i++){
+                array_push($row, $this->boardPositions[$x + $dx * $i][$y + $dy * $i]);
+            }
+            return row;
+        }
     }
