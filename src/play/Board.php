@@ -33,24 +33,13 @@
                     return $this->boardPositions[$x][$y];
                 }
             }
+            return false;
         }
 
         function placeStone($player, $x, $y)
         {
             $this->boardPositions[$x][$y] = $player;
             $this->updateFile();
-        }
-
-        function getRow($x, $y, $dx, $dy){
-            $row = array();
-            for($i = 0; $i < 4; $i++){
-                array_push($row, $this->boardPositions[$x +$dx * $i][$y+$dy*$i]);
-            }
-            return row;
-        }
-
-        function isEmpty($x, $y){
-            return $this->boardPositions[$x][$y] == 0;
         }
 
         static function fromJson($json){

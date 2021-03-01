@@ -1,5 +1,6 @@
 <?php // index.php
 class GameInfo
+
 {
     public $size;
     public $strategies;
