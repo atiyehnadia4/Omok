@@ -53,7 +53,7 @@ class Game
             for($j = 0; $j < count($this->board->boardPositions[0]); $j++){
                 if($this->board->boardPositions[$i][$j] == $player){
                     # Check \
-                    array_push($this->winning_row, array($i => $j));
+                    //array_push($this->winning_row, array($i => $j));
                     if($this->countConsecutive($i, $j, -1,1, $player) + $this->countConsecutive($i, $j, 1,-1, $player) >= 4){
                         return true;
                     }
@@ -87,7 +87,7 @@ class Game
             $y += $dy;
 
             if(!empty($this->board->boardPositions[$y][$x]) && $this->board->boardPositions[$y][$x] == $player) {
-                array_push($this->winning_row, array($y => $x));
+                //array_push($this->winning_row, array($y => $x));
                 $count++;
             }
             else {

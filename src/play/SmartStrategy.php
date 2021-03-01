@@ -8,66 +8,66 @@ class SmartStrategy extends MoveStrategy{
         for ($i = 0; $i < $this->board->size; $i++) {
             for ($j = 0; $j < count($this->board->boardPositions[0]); $j++) {
                 if ($this->board->boardPositions[$i][$j] == 1) {
-                    # Check \
-                    if ($this->countConsecutive($i, $j, -1, 1, 1) + $this->countConsecutive($i, $j, 1, -1, 1) >= 3) {
+                    # Check /
+                    if ($this->countConsecutive($i, $j, -1, 1, 1) + $this->countConsecutive($i, $j, 1, -1, 1) >= 2) {
                         for ($s = 0; $s < 3; $s++) {
+                            if ($this->board->boardPositions[$i + $s][$j - $s] == 0) {
+                                $this->board->placeStone(2, $i + $s, $j - $s);
+                                $this->board->updateFile();
+                                return [$i + $s, $j - $s];
+                            }
                             if ($this->board->boardPositions[$i - $s][$j + $s] == 0) {
                                 $this->board->placeStone(2, $i - $s, $j + $s);
                                 $this->board->updateFile();
-                                return [$i, $j + $s];
-                            }
-                            if ($this->board->boardPositions[$i + $s ][$j - $s] == 0) {
-                                $this->board->placeStone(2, $i + $s, $j - $s);
-                                $this->board->updateFile();
-                                return [$i, $j - $s];
+                                return [$i - $s, $j + $s];
                             }
                         }
 
                     }
 
-                    #Check /
-                    if ($this->countConsecutive($i, $j, -1, -1, 1) + $this->countConsecutive($i, $j, 1, 1, 1) >= 3) {
+                    #Check \
+                    if ($this->countConsecutive($i, $j, -1, -1, 1) + $this->countConsecutive($i, $j, 1, 1, 1) >= 2) {
                         for ($s = 0; $s < 3; $s++) {
-                            if ($this->board->boardPositions[$i - $s][$j - $s] == 0) {
-                                $this->board->placeStone(2, $i - $s, $j - $s);
-                                $this->board->updateFile();
-                                return [$i, $j + $s];
-                            }
                             if ($this->board->boardPositions[$i + $s ][$j + $s] == 0) {
                                 $this->board->placeStone(2, $i + $s, $j + $s);
                                 $this->board->updateFile();
-                                return [$i, $j - $s];
+                                return [$i + $s, $j + $s];
+                            }
+                            if ($this->board->boardPositions[$i - $s][$j - $s] == 0) {
+                                $this->board->placeStone(2, $i - $s, $j - $s);
+                                $this->board->updateFile();
+                                return [$i - $s, $j - $s];
                             }
                         }
 
 
                     }
                     #Check --
-                    if ($this->countConsecutive($i, $j, -1, 0, 1) + $this->countConsecutive($i, $j, 1, 0, 1) >= 3) {
+                    if ($this->countConsecutive($i, $j, -1, 0, 1) + $this->countConsecutive($i, $j, 1, 0, 1) >= 2) {
                         for ($s = 0; $s < 3; $s++) {
-                            if ($this->board->boardPositions[$i - $s][$j] == 0) {
-                                $this->board->placeStone(2, $i - $s, $j);
+                            if ($this->board->boardPositions[$i + $s + 4][$j] == 0) {
+                                $this->board->placeStone(2, $i  + $s, $j );
                                 $this->board->updateFile();
-                                return [$i, $j + $s];
+                                return [$i + $s, $j];
                             }
-                            if ($this->board->boardPositions[$i + $s][$j] == 0) {
-                                $this->board->placeStone(2, $i  + $s, $j);
+                            if ($this->board->boardPositions[$i - $s + 4][$j] == 0) {
+                                $this->board->placeStone(2, $i - $s + 2 , $j);
                                 $this->board->updateFile();
-                                return [$i, $j - $s];
+                                return [$i - $s, $j];
                             }
                         }
 
                     }
                     #Check |
-                    if ($this->countConsecutive($i, $j, 0, -1, 1) + $this->countConsecutive($i, $j, 0, 1, 1) >= 3) {
+                    if ($this->countConsecutive($i, $j, 0, -1, 1) + $this->countConsecutive($i, $j, 0, 1, 1) >= 2) {
                         for ($s = 0; $s < 3; $s++) {
-                            if ($this->board->boardPositions[$i][$j - $s] == 0) {
-                                $this->board->placeStone(2, $i, $j - $s);
+                            if ($this->board->boardPositions[$i][$j + $s] == 0) {
+                                $this->board->placeStone(2, $i, $j + $s);
                                 $this->board->updateFile();
                                 return [$i, $j + $s];
                             }
-                            if ($this->board->boardPositions[$i][$j + $s] == 0) {
-                                $this->board->placeStone(2, $i, $j + $s);
+                            if ($this->board->boardPositions[$i][$j - $s] == 0) {
+                                $this->board->placeStone(2, $i, $j - $s);
                                 $this->board->updateFile();
                                 return [$i, $j - $s];
                             }
@@ -77,6 +77,7 @@ class SmartStrategy extends MoveStrategy{
                 }
             }
         }
+
         $random = new RandomStrategy($this->board);
         return $random->pickPlace();
     }

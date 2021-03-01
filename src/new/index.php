@@ -1,4 +1,8 @@
+
 <?php // index.php
+#Nadia Atiyeh CS 3360
+#Worked in Collaboration with Christian Rocha
+
 require "../play/Board.php";
 
 define('STRATEGY', 'strategy'); // constant
